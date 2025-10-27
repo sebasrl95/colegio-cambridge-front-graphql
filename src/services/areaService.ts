@@ -1,67 +1,44 @@
-import { gql } from "@apollo/client";
 import client from "./graphqlClient";
+import type { Area, CreateAreaInput, UpdateAreaInput } from "../types/area";
+import { GET_AREA, GET_AREAS } from "../graphql/queries/areaQueries";
+import { CREATE_AREA, DELETE_AREA, UPDATE_AREA } from "../graphql/mutations/areaMutations";
 
-export const GET_AREAS = gql`
-  query {
-    areas {
-      _id
-      nombre
-      oficinas { _id codigo }
-      salones { _id codigo }
-    }
-  }
-`;
-
-export const getAreas = async () => {
-    const { data } = await client.query({ query: GET_AREAS });
-    return data.areas;
-};
-
-export const GET_AREA = gql`
-  query ($id: ID!) {
-    area(id: $id) {
-      _id
-      nombre
-      oficinas { _id codigo }
-      salones { _id codigo }
-    }
-  }
-`;
-
-export const getArea = async (id: string) => {
-    const { data } = await client.query({ query: GET_AREA, variables: { id } });
-    return data.area;
-};
-
-export const CREATE_AREA = gql`
-  mutation ($input: CreateAreaInput!) {
-    createArea(createAreaInput: $input) {
-      _id
-      nombre
-    }
-  }
-`;
-
-export const createArea = async (input: { nombre: string }) => {
-    const { data } = await client.mutate({
-        mutation: CREATE_AREA,
-        variables: { input },
+export const getAreas = async (): Promise<Area[]> => {
+    const { data } = await client.query<{ areas: Area[] }>({
+        query: GET_AREAS,
     });
-    return data.createArea;
+    return data?.areas ?? [];
 };
 
-export const DELETE_AREA = gql`
-  mutation ($id: ID!) {
-    removeArea(id: $id) {
-      _id
-    }
-  }
-`;
+export const getArea = async (id: string): Promise<Area> => {
+    const { data } = await client.query<{ area: Area }>({ query: GET_AREA, variables: { id } });
+    return data?.area ?? {} as Area;
+};
 
-export const deleteArea = async (id: string) => {
-    const { data } = await client.mutate({
+export const createArea = async (
+    input: CreateAreaInput
+): Promise<Area> => {
+    const { data } = await client.mutate<{ createArea: Area }>({
+        mutation: CREATE_AREA,
+        variables: { createAreaInput: input },
+    });
+    return data?.createArea ?? {} as Area;
+};
+
+export const updateArea = async (
+    input: UpdateAreaInput
+): Promise<Area> => {
+    const { data } = await client.mutate<{ updatedArea: Area }>({
+        mutation: UPDATE_AREA,
+        variables: { updateAreaInput: input },
+    });
+    return data?.updatedArea ?? {} as Area;
+};
+
+export const deleteArea = async (id: string): Promise<Area> => {
+    const { data } = await client.mutate<{ deleteArea: Area }>({
         mutation: DELETE_AREA,
         variables: { id },
     });
-    return data.removeArea;
+    return data?.deleteArea ?? {} as Area;
 };

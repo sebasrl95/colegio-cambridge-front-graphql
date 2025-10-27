@@ -1,38 +1,44 @@
-import { gql } from "@apollo/client";
 import client from "./graphqlClient";
+import type { Empleado, CreateEmpleadoInput, UpdateEmpleadoInput } from "../types/empleado";
+import { GET_EMPLEADO, GET_EMPLEADOS } from "../graphql/queries/empleadoQueries";
+import { CREATE_EMPLEADO, UPDATE_EMPLEADO, DELETE_EMPLEADO } from "../graphql/mutations/empleadoMutations";
 
-export const GET_EMPLEADOS = gql`
-  query {
-    empleados {
-      _id
-      nombre
-      documento
-      tipoEmpleado
-      tipoProfesor
-      area { _id nombre }
-      oficina { _id codigo }
-    }
-  }
-`;
-
-export const getEmpleados = async () => {
-    const { data } = await client.query({ query: GET_EMPLEADOS });
-    return data.empleados;
+export const getEmpleados = async (): Promise<Empleado[]> => {
+    const { data } = await client.query<{ empleados: Empleado[] }>({
+        query: GET_EMPLEADOS,
+    });
+    return data?.empleados ?? [];
 };
 
-export const CREATE_EMPLEADO = gql`
-  mutation ($input: CreateEmpleadoInput!) {
-    createEmpleado(createEmpleadoInput: $input) {
-      _id
-      nombre
-    }
-  }
-`;
+export const getEmpleado = async (id: string): Promise<Empleado> => {
+    const { data } = await client.query<{ empleado: Empleado }>({ query: GET_EMPLEADO, variables: { id } });
+    return data?.empleado ?? {} as Empleado;
+};
 
-export const createEmpleado = async (input: any) => {
-    const { data } = await client.mutate({
+export const createEmpleado = async (
+    input: CreateEmpleadoInput
+): Promise<Empleado> => {
+    const { data } = await client.mutate<{ createEmpleado: Empleado }>({
         mutation: CREATE_EMPLEADO,
-        variables: { input },
+        variables: { createEmpleadoInput: input },
     });
-    return data.createEmpleado;
+    return data?.createEmpleado ?? {} as Empleado;
+};
+
+export const updateEmpleado = async (
+    input: UpdateEmpleadoInput
+): Promise<Empleado> => {
+    const { data } = await client.mutate<{ updatedEmpleado: Empleado }>({
+        mutation: UPDATE_EMPLEADO,
+        variables: { updateEmpleadoInput: input },
+    });
+    return data?.updatedEmpleado ?? {} as Empleado;
+};
+
+export const deleteEmpleado = async (id: string): Promise<Empleado> => {
+    const { data } = await client.mutate<{ deleteEmpleado: Empleado }>({
+        mutation: DELETE_EMPLEADO,
+        variables: { id },
+    });
+    return data?.deleteEmpleado ?? {} as Empleado;
 };

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAreas, deleteArea } from "../../services/areaService";
-import Loader from "../Loader/Loader";
-import ErrorMessage from "../Error/ErrorMessage";
+import { getAreas, deleteArea } from "../../services/areaService"
+import Loader from "@components/Loader/Loader";
+import ErrorMessage from "@components/Error/ErrorMessage";
+import type { Area } from "../../types/area";
 
 export default function AreaList() {
-    const [areas, setAreas] = useState([]);
+    const [areas, setAreas] = useState<Area[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -24,10 +25,10 @@ export default function AreaList() {
         fetchData();
     }, []);
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (id: string) => {
         try {
             await deleteArea(id);
-            setAreas(areas.filter((s) => s._id !== id));
+            setAreas(areas.filter((s) => s.id !== id));
         } catch (err) {
             console.error("Error al eliminar área:", err);
             setError("No se pudo eliminar el área. Revise la conexión con el servidor.");
@@ -54,12 +55,12 @@ export default function AreaList() {
                     </thead>
                     <tbody>
                         {areas.map(s => (
-                            <tr key={s._id}>
-                                <td>{s._id}</td>
+                            <tr key={s.id}>
+                                <td>{s.id}</td>
                                 <td>{s.nombre}</td>
                                 <td>
-                                    <Link to={`/areas/editar/${s._id}`} className="btn btn-warning btn-sm">Editar</Link>{" "}
-                                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(s._id)}>Eliminar</button>
+                                    <Link to={`/areas/editar/${s.id}`} className="btn btn-warning btn-sm">Editar</Link>{" "}
+                                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(s.id)}>Eliminar</button>
                                 </td>
                             </tr>
                         ))}

@@ -1,15 +1,16 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/Home/Home.jsx";
-import Navbar from "./components/Navbar/Navbar.jsx";
-import SalonList from "./components/Salon/SalonList.jsx";
-import SalonForm from "./components/Salon/SalonForm.jsx";
-import AreaList from "./components/Area/AreaList.jsx";
-import AreaForm from "./components/Area/AreaForm.jsx";
-import OficinaList from "./components/Oficina/OficinaList.jsx";
-import OficinaForm from "./components/Oficina/OficinaForm.jsx";
-import EmpleadoList from "./components/Empleado/EmpleadoList.jsx";
-import EmpleadoForm from "./components/Empleado/EmpleadoForm.jsx";
-import Reportes from "./components/Reportes/Reportes.jsx";
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Navbar from "@components/Navbar/Navbar";
+import Home from '@components/Home/Home';
+import AreaForm from '@components/Area/AreaForm';
+import AreaList from '@components/Area/AreaList';
+import EmpleadoForm from '@components/Empleado/EmpleadoForm';
+import EmpleadoList from '@components/Empleado/EmpleadoList';
+import OficinaForm from '@components/Oficina/OficinaForm';
+import OficinaList from '@components/Oficina/OficinaList';
+import Reportes from '@components/Reportes/Reportes';
+import SalonForm from '@components/Salon/SalonForm';
+import SalonList from '@components/Salon/SalonList';
+import './App.css'
 
 function App() {
   return (
@@ -42,7 +43,7 @@ function App() {
         <Route path="/reportes" element={<Reportes />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App
