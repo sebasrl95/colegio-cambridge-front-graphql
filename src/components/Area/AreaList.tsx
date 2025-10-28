@@ -1,6 +1,7 @@
 import { useEffect, useState, type JSX } from "react";
 import { Link } from "react-router-dom";
 import Loader from "@components/Loader/Loader";
+import { Edit, Trash2 } from "lucide-react";
 import ErrorMessage from "@components/Error/ErrorMessage";
 import { getAreas, deleteArea } from "@services/areaService"
 import type { Area } from "@interfaces/area";
@@ -35,32 +36,48 @@ export default function AreaList(): JSX.Element {
         }
     };
 
-    if (loading) return <Loader text="Cargando areas..." />;
-    if (error) return <ErrorMessage message={error} />;
-
     return (
-        <div className="container mt-4">
-            <h2>Áreas</h2>
-            <Link to="/areas/nuevo" className="btn btn-primary mb-3">Nueva Área</Link>
+        <div className="max-w-4xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
+            {loading && <Loader text="Cargando áreas..." />}
+            {error && <ErrorMessage message={error} />}
+
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Áreas</h2>
+            <Link
+                to="/areas/nuevo"
+                className="inline-flex items-center bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 mb-4">
+                <span className="mr-2"><Edit size={16} /></span>
+                Nueva Área
+            </Link>
+
             {areas.length === 0 ? (
-                <p>No hay áreas registradas.</p>
+                <p className="text-gray-600">No hay áreas registradas.</p>
             ) : (
-                <table className="table table-bordered">
+                <table className="min-w-full table-auto border-collapse text-sm">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Acciones</th>
+                        <tr className="bg-gray-100">
+                            <th className="px-6 py-3 text-left font-semibold text-gray-600">ID</th>
+                            <th className="px-6 py-3 text-left font-semibold text-gray-600">Nombre</th>
+                            <th className="px-6 py-3 text-left font-semibold text-gray-600">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {areas.map(s => (
-                            <tr key={s.id}>
-                                <td>{s.id}</td>
-                                <td>{s.nombre}</td>
-                                <td>
-                                    <Link to={`/areas/editar/${s.id}`} className="btn btn-warning btn-sm">Editar</Link>{" "}
-                                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(s.id)}>Eliminar</button>
+                        {areas.map((s) => (
+                            <tr key={s.id} className="border-b hover:bg-gray-50">
+                                <td className="px-6 py-4">{s.id}</td>
+                                <td className="px-6 py-4">{s.nombre}</td>
+                                <td className="px-6 py-4">
+                                    <Link
+                                        to={`/areas/editar/${s.id}`}
+                                        className="inline-flex items-center bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600 mr-2">
+                                        <Edit size={14} />
+                                        <span className="ml-1">Editar</span>
+                                    </Link>
+                                    <button
+                                        className="inline-flex items-center bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700"
+                                        onClick={() => handleDelete(s.id)}>
+                                        <Trash2 size={14} />
+                                        <span className="ml-1">Eliminar</span>
+                                    </button>
                                 </td>
                             </tr>
                         ))}
