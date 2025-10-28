@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getArea, createArea, updateArea } from "../../services/areaService";
+import { getArea, createArea, updateArea } from "@services/areaService";
+import ErrorMessage from "@components/Error/ErrorMessage";
 
 export default function AreaForm() {
-    const [nombre, setNombre] = useState("");
+    const [nombre, setNombre] = useState<string>("");
+    const [errors, setErrors] = useState<string[]>([]);
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -13,14 +15,27 @@ export default function AreaForm() {
         }
     }, [id]);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (id) {
-            await updateArea(id, { nombre });
-        } else {
-            await createArea({ nombre });
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        try {
+            e.preventDefault();
+            if (id) {
+                await updateArea(id, { nombre });
+            } else {
+                await createArea({ nombre });
+            }
+            navigate("/areas");
+        } catch (err: PromiseLike<unknown> | unknown) {
+            console.error("Error al crear area", err);
+            const axiosLike = err as { response?: { data?: { message?: string[] | string } } } | undefined;
+            if (axiosLike?.response?.data?.message) {
+                const msg = axiosLike.response.data.message;
+                setErrors(Array.isArray(msg) ? msg : [msg]);
+            } else if (err instanceof Error) {
+                setErrors([err.message]);
+            } else {
+                setErrors(["Error al procesar la solicitud"]);
+            }
         }
-        navigate("/areas");
     };
 
     const handleCancel = () => {
@@ -44,6 +59,9 @@ export default function AreaForm() {
                 <button type="submit" className="btn btn-success me-2">Guardar</button>
                 <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancelar</button>
             </form>
+            {errors.length > 0 && errors.map((err) => (
+                <ErrorMessage message={err} />
+            ))}
         </div>
     );
 }

@@ -5,19 +5,23 @@ export const GET_SALONES = gql`
     salones {
       id
       codigo
-      capacidad
-      area { id nombre }
+      area {
+        id
+        nombre
+      }
     }
   }
 `;
 
 export const GET_SALON = gql`
   query ($id: ID!) {
-    area(id: $id) {
+    salon(id: $id) {
       id
-      nombre
-      oficinas { id codigo }
-      salones { id codigo }
+      codigo
+      area {
+        id
+        nombre
+      }
     }
   }
 `;

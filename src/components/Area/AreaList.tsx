@@ -1,14 +1,14 @@
 import { useEffect, useState, type JSX } from "react";
 import { Link } from "react-router-dom";
-import { getAreas, deleteArea } from "../../services/areaService"
 import Loader from "@components/Loader/Loader";
 import ErrorMessage from "@components/Error/ErrorMessage";
-import type { Area } from "../../types/area";
+import { getAreas, deleteArea } from "@services/areaService"
+import type { Area } from "@interfaces/area";
 
 export default function AreaList(): JSX.Element {
     const [areas, setAreas] = useState<Area[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>("");
 
     useEffect(() => {
         const fetchData = async () => {

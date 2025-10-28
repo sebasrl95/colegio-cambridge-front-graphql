@@ -1,7 +1,9 @@
+import type { Area } from "./area";
+
 export interface Salon {
-  _id: string;
+  id: string;
   codigo: string;
-  area: string;
+  area: Area | null;
 }
 
 export interface CreateSalonInput {

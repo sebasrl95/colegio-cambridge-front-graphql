@@ -1,5 +1,5 @@
 import client from "./graphqlClient";
-import type { Salon, CreateSalonInput, UpdateSalonInput } from "../types/salon";
+import type { Salon, CreateSalonInput, UpdateSalonInput } from "../interfaces/salon";
 import { GET_SALON, GET_SALONES } from "../graphql/queries/salonQueries";
 import { CREATE_SALON, UPDATE_SALON, DELETE_SALON } from "../graphql/mutations/salonMutations";
 
@@ -20,17 +20,18 @@ export const createSalon = async (
 ): Promise<Salon> => {
     const { data } = await client.mutate<{ createSalon: Salon }>({
         mutation: CREATE_SALON,
-        variables: { createSalonInput: input },
+        variables: { input },
     });
     return data?.createSalon ?? {} as Salon;
 };
 
 export const updateSalon = async (
+    id: string,
     input: UpdateSalonInput
 ): Promise<Salon> => {
     const { data } = await client.mutate<{ updatedSalon: Salon }>({
         mutation: UPDATE_SALON,
-        variables: { updateSalonInput: input },
+        variables: { id, input },
     });
     return data?.updatedSalon ?? {} as Salon;
 };

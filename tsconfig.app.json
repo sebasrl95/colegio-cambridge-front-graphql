@@ -25,6 +25,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
+      "@*": [
+        "src/*"
+      ],
       "@components/*": [
         "src/components/*"
       ],
@@ -34,8 +37,8 @@
       "@services/*": [
         "src/services/*"
       ],
-      "@types/*": [
-        "src/types/*"
+      "@interfaces/*": [
+        "src/interfaces/*"
       ]
     }
   },

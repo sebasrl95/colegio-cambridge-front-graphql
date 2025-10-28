@@ -1,5 +1,5 @@
 import client from "./graphqlClient";
-import type { Empleado, CreateEmpleadoInput, UpdateEmpleadoInput } from "../types/empleado";
+import type { Empleado, CreateEmpleadoInput, UpdateEmpleadoInput } from "../interfaces/empleado";
 import { GET_EMPLEADO, GET_EMPLEADOS } from "../graphql/queries/empleadoQueries";
 import { CREATE_EMPLEADO, UPDATE_EMPLEADO, DELETE_EMPLEADO } from "../graphql/mutations/empleadoMutations";
 

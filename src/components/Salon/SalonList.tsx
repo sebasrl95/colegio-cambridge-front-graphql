@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getSalones, deleteSalon } from "../../services/salonService";
-import Loader from "../Loader/Loader";
-import ErrorMessage from "../Error/ErrorMessage";
+import { getSalones, deleteSalon } from "@services/salonService";
+import Loader from "@components/Loader/Loader";
+import ErrorMessage from "@components/Error/ErrorMessage";
+import type { Salon } from "@interfaces/salon";
 
 export default function SalonList() {
-    const [salones, setSalones] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [salones, setSalones] = useState<Salon[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,10 +25,10 @@ export default function SalonList() {
         fetchData();
     }, []);
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (id: string) => {
         try {
             await deleteSalon(id);
-            setSalones(salones.filter((s) => s._id !== id));
+            setSalones(salones.filter((s) => s.id !== id));
         } catch (err) {
             console.error("Error al eliminar salón:", err);
             setError("No se pudo eliminar el salón. Revise la conexión con el servidor.");
@@ -57,19 +58,19 @@ export default function SalonList() {
                     </thead>
                     <tbody>
                         {salones.map((s) => (
-                            <tr key={s._id}>
-                                <td>{s._id}</td>
+                            <tr key={s.id}>
+                                <td>{s.id}</td>
                                 <td>{s.codigo}</td>
-                                <td>{s.area.nombre}</td>
+                                <td>{s.area?.nombre || 'N/A' }</td>
                                 <td>
                                     <Link
-                                        to={`/salones/editar/${s._id}`}
+                                        to={`/salones/editar/${s.id}`}
                                         className="btn btn-warning btn-sm me-2">
                                         Editar
                                     </Link>
                                     <button
                                         className="btn btn-danger btn-sm"
-                                        onClick={() => handleDelete(s._id)}>
+                                        onClick={() => handleDelete(s.id)}>
                                         Eliminar
                                     </button>
                                 </td>

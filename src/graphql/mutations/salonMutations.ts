@@ -5,21 +5,29 @@ export const CREATE_SALON = gql`
     createSalon(createSalonInput: $input) {
       id
       codigo
+      area {
+        id
+        nombre
+      }
     }
   }
 `;
 
 export const UPDATE_SALON = gql`
-  mutation ($input: updateSalonInput!) {
-    actualizarSalon(updateSalonInput: $input) {
+  mutation ($id: ID!, $input: UpdateSalonInput!) {
+    updateSalon(id: $id, updateSalonInput: $input) {
       id
-      nombre
+      codigo
+      area {
+        id
+        nombre
+      }
     }
   }
 `;
 
 export const DELETE_SALON = gql`
-  mutation ($id: ID!) {
+  mutation ($id: String!) {
     removeSalon(id: $id) {
       id
     }

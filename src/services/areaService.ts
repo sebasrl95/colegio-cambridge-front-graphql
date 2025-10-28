@@ -1,5 +1,5 @@
 import client from "./graphqlClient";
-import type { Area, CreateAreaInput, UpdateAreaInput } from "../types/area";
+import type { Area, CreateAreaInput, UpdateAreaInput } from "../interfaces/area";
 import { GET_AREA, GET_AREAS } from "../graphql/queries/areaQueries";
 import { CREATE_AREA, DELETE_AREA, UPDATE_AREA } from "../graphql/mutations/areaMutations";
 

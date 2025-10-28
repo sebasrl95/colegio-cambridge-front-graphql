@@ -1,5 +1,5 @@
 import client from "./graphqlClient";
-import type { Oficina, CreateOficinaInput, UpdateOficinaInput } from "../types/oficina";
+import type { Oficina, CreateOficinaInput, UpdateOficinaInput } from "../interfaces/oficina";
 import { GET_OFICINA, GET_OFICINAS } from "../graphql/queries/oficinaQueries";
 import { CREATE_OFICINA, UPDATE_OFICINA, DELETE_OFICINA } from "../graphql/mutations/oficinaMutations";
 

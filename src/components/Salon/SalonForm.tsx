@@ -1,16 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getSalon, createSalon, updateSalon } from "../../services/salonService";
-import { getAreas } from "../../services/areaService";
-import Loader from "../Loader/Loader";
-import ErrorMessage from "../Error/ErrorMessage";
+import { getSalon, createSalon, updateSalon } from "@services/salonService";
+import { getAreas } from "@services/areaService";
+import Loader from "@components/Loader/Loader";
+import ErrorMessage from "@components/Error/ErrorMessage";
+import type { Area } from "@interfaces/area";
 
 export default function SalonForm() {
-    const [codigo, setCodigo] = useState("");
-    const [areaId, setAreaId] = useState("");
-    const [areas, setAreas] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [errors, setErrors] = useState([]);
+    const [codigo, setCodigo] = useState<string>("");
+    const [areaId, setAreaId] = useState<string>("");
+    const [areas, setAreas] = useState<Area[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [errors, setErrors] = useState<string[]>([]);
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ export default function SalonForm() {
                 if (id) {
                     const salon = await getSalon(id);
                     setCodigo(salon.codigo);
-                    setAreaId(salon.area?._id?.toString() || "");
+                    setAreaId(salon.area?.id?.toString() || "");
                 }
             } catch (err) {
                 console.error("Error al cargar formulario:", err);
@@ -34,7 +35,7 @@ export default function SalonForm() {
         fetchData();
     }, [id]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             if (id) {
@@ -43,9 +44,17 @@ export default function SalonForm() {
                 await createSalon({ codigo, area: areaId });
             }
             navigate("/salones");
-        } catch (err) {
-            console.error("Error al crear salon", err);
-            setErrors(err.response.data.message);
+        } catch (err: PromiseLike<unknown> | unknown) {
+            console.error("Error al procesar salon", err);
+            const axiosLike = err as { response?: { data?: { message?: string[] | string } } } | undefined;
+            if (axiosLike?.response?.data?.message) {
+                const msg = axiosLike.response.data.message;
+                setErrors(Array.isArray(msg) ? msg : [msg]);
+            } else if (err instanceof Error) {
+                setErrors([err.message]);
+            } else {
+                setErrors(["Error al procesar la solicitud"]);
+            }
         }
     };
 
@@ -82,7 +91,7 @@ export default function SalonForm() {
                             required>
                             <option value="">Seleccione un área</option>
                             {areas.map((area) => (
-                                <option key={area._id} value={area._id}>
+                                <option key={area.id} value={area.id}>
                                     {area.nombre}
                                 </option>
                             ))}
