@@ -20,25 +20,26 @@ export const createArea = async (
 ): Promise<Area> => {
     const { data } = await client.mutate<{ createArea: Area }>({
         mutation: CREATE_AREA,
-        variables: { createAreaInput: input },
+        variables: { input },
     });
     return data?.createArea ?? {} as Area;
 };
 
 export const updateArea = async (
+    id: string,
     input: UpdateAreaInput
 ): Promise<Area> => {
     const { data } = await client.mutate<{ updatedArea: Area }>({
         mutation: UPDATE_AREA,
-        variables: { updateAreaInput: input },
+        variables: { id, input },
     });
     return data?.updatedArea ?? {} as Area;
 };
 
-export const deleteArea = async (id: string): Promise<Area> => {
-    const { data } = await client.mutate<{ deleteArea: Area }>({
+export const deleteArea = async (id: string): Promise<boolean> => {
+    const { data } = await client.mutate<{ deleteArea: boolean }>({
         mutation: DELETE_AREA,
         variables: { id },
     });
-    return data?.deleteArea ?? {} as Area;
+    return data?.deleteArea ?? false;
 };

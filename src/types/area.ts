@@ -10,10 +10,8 @@ export interface Area {
 
 export interface CreateAreaInput {
   nombre: string;
-  descripcion?: string;
 }
 
 export interface UpdateAreaInput {
   nombre?: string;
-  descripcion?: string;
 }

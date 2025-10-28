@@ -2,17 +2,17 @@ import { gql } from "@apollo/client";
 
 export const CREATE_AREA = gql`
   mutation ($input: CreateAreaInput!) {
-    createArea(createAreaInput: $input) {
-      _id
+    crearArea(createAreaInput: $input) {
+      id
       nombre
     }
   }
 `;
 
 export const UPDATE_AREA = gql`
-  mutation ($input: updateAreaInput!) {
-    actualizarArea(updateAreaInput: $input) {
-      _id
+  mutation ($id: ID!, $input: UpdateAreaInput!) {
+    actualizarArea(id: $id, updateAreaInput: $input) {
+      id
       nombre
     }
   }
@@ -20,8 +20,6 @@ export const UPDATE_AREA = gql`
 
 export const DELETE_AREA = gql`
   mutation ($id: ID!) {
-    removeArea(id: $id) {
-      _id
-    }
+    eliminarArea(id: $id)
   }
 `;

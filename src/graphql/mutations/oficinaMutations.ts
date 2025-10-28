@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export const CREATE_OFICINA = gql`
   mutation ($input: CreateOficinaInput!) {
     createOficina(createOficinaInput: $input) {
-      _id
+      id
       codigo
       area
     }
@@ -13,7 +13,7 @@ export const CREATE_OFICINA = gql`
 export const UPDATE_OFICINA = gql`
   mutation ($input: updateOficinaInput!) {
     actualizarOficina(updateOficinaInput: $input) {
-      _id
+      id
       nombre
       area
     }
@@ -23,7 +23,7 @@ export const UPDATE_OFICINA = gql`
 export const DELETE_OFICINA = gql`
   mutation ($id: ID!) {
     removeOficina(id: $id) {
-      _id
+      id
     }
   }
 `;

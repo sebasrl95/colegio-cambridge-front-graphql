@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export const CREATE_EMPLEADO = gql`
   mutation ($input: CreateEmpleadoInput!) {
     createEmpleado(createEmpleadoInput: $input) {
-      _id
+      id
       nombre
       documento
       area
@@ -16,7 +16,7 @@ export const CREATE_EMPLEADO = gql`
 export const UPDATE_EMPLEADO = gql`
   mutation ($input: updateEmpleadoInput!) {
     actualizarEmpleado(updateEmpleadoInput: $input) {
-      _id
+      id
       nombre
       documento
       area
@@ -29,7 +29,7 @@ export const UPDATE_EMPLEADO = gql`
 export const DELETE_EMPLEADO = gql`
   mutation ($id: ID!) {
     removeEmpleado(id: $id) {
-      _id
+      id
     }
   }
 `;

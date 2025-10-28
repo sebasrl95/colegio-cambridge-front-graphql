@@ -3,9 +3,9 @@ import { gql } from "@apollo/client";
 export const GET_OFICINAS = gql`
   query {
     oficinas {
-      _id
+      id
       codigo
-      area { _id nombre }
+      area { id nombre }
     }
   }
 `;
@@ -13,9 +13,9 @@ export const GET_OFICINAS = gql`
 export const GET_OFICINA = gql`
   query ($id: ID!) {
     oficina(id: $id) {
-      _id
+      id
       codigo
-      area { _id nombre }
+      area { id nombre }
     }
   }
 `;

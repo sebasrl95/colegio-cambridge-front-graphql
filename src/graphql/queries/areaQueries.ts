@@ -12,10 +12,8 @@ export const GET_AREAS = gql`
 export const GET_AREA = gql`
   query ($id: ID!) {
     area(id: $id) {
-      _id
+      id
       nombre
-      oficinas { _id codigo }
-      salones { _id codigo }
     }
   }
 `;
