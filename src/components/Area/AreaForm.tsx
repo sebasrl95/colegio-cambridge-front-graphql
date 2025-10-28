@@ -59,11 +59,11 @@ export default function AreaForm() {
                     />
                 </div>
                 <div className="flex space-x-2">
-                    <button type="submit" className="inline-flex items-center bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
+                    <button type="submit" className="inline-flex items-center bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 cursor-pointer">
                         <Save size={16} />
                         <span className="ml-2">Guardar</span>
                     </button>
-                    <button type="button" className="inline-flex items-center bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400" onClick={handleCancel}>
+                    <button type="button" className="inline-flex items-center bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 cursor-pointer" onClick={handleCancel}>
                         <X size={16} />
                         <span className="ml-2">Cancelar</span>
                     </button>

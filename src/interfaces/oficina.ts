@@ -1,9 +1,10 @@
+import type { Area } from "./area";
 import type { Empleado } from "./empleado";
 
 export interface Oficina {
-  _id: string;
+  id: string;
   codigo: string;
-  area: string;
+  area: Area | null;
   empleados: Empleado[];
 }
 

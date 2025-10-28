@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Edit, Trash2 } from "lucide-react";
 import { getSalones, deleteSalon } from "@services/salonService";
 import Loader from "@components/Loader/Loader";
 import ErrorMessage from "@components/Error/ErrorMessage";
@@ -35,43 +36,49 @@ export default function SalonList() {
         }
     };
 
-    if (loading) return <Loader text="Cargando salones..." />;
-    if (error) return <ErrorMessage message={error} />;
-
     return (
-        <div className="container mt-4">
-            <h2>Salones</h2>
-            <Link to="/salones/nuevo" className="btn btn-primary mb-3">
-                Nuevo salón
+        <div className="max-w-4xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
+            {loading && <Loader text="Cargando salones..." />}
+            {error && <ErrorMessage message={error} />}
+
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Salones</h2>
+            <Link
+                to="/salones/nuevo"
+                className="inline-flex items-center bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 mb-4">
+                <span className="mr-2"><Edit size={16} /></span>
+                Nueva Salón
             </Link>
+
             {salones.length === 0 ? (
-                <p>No hay salones registrados.</p>
+                <p className="text-gray-600">No hay salones registrados.</p>
             ) : (
-                <table className="table table-bordered">
+                <table className="min-w-full table-auto border-collapse text-sm">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Código</th>
-                            <th>Área</th>
-                            <th>Acciones</th>
+                        <tr className="bg-gray-100">
+                            <th className="px-6 py-3 text-left font-semibold text-gray-600">ID</th>
+                            <th className="px-6 py-3 text-left font-semibold text-gray-600">Nombre</th>
+                            <th className="px-6 py-3 text-left font-semibold text-gray-600">Área</th>
+                            <th className="px-6 py-3 text-left font-semibold text-gray-600">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {salones.map((s) => (
-                            <tr key={s.id}>
-                                <td>{s.id}</td>
-                                <td>{s.codigo}</td>
-                                <td>{s.area?.nombre || 'N/A' }</td>
-                                <td>
+                            <tr key={s.id} className="border-b hover:bg-gray-50">
+                                <td className="px-6 py-4">{s.id}</td>
+                                <td className="px-6 py-4">{s.codigo}</td>
+                                <td className="px-6 py-4">{s.area?.nombre || 'N/A' }</td>
+                                <td className="px-6 py-4">
                                     <Link
                                         to={`/salones/editar/${s.id}`}
-                                        className="btn btn-warning btn-sm me-2">
-                                        Editar
+                                        className="inline-flex items-center bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600 mr-2">
+                                        <Edit size={14} />
+                                        <span className="ml-1">Editar</span>
                                     </Link>
                                     <button
-                                        className="btn btn-danger btn-sm"
+                                        className="inline-flex items-center bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700 cursor-pointer"
                                         onClick={() => handleDelete(s.id)}>
-                                        Eliminar
+                                        <Trash2 size={14} />
+                                        <span className="ml-1">Eliminar</span>
                                     </button>
                                 </td>
                             </tr>

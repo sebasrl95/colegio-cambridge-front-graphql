@@ -1,11 +1,12 @@
 import client from "./graphqlClient";
-import type { Oficina, CreateOficinaInput, UpdateOficinaInput } from "../interfaces/oficina";
-import { GET_OFICINA, GET_OFICINAS } from "../graphql/queries/oficinaQueries";
-import { CREATE_OFICINA, UPDATE_OFICINA, DELETE_OFICINA } from "../graphql/mutations/oficinaMutations";
+import type { Oficina, CreateOficinaInput, UpdateOficinaInput } from "@interfaces/oficina";
+import { GET_OFICINA, GET_OFICINAS } from "@graphql/queries/oficinaQueries";
+import { CREATE_OFICINA, UPDATE_OFICINA, DELETE_OFICINA } from "@graphql/mutations/oficinaMutations";
 
 export const getOficinas = async (): Promise<Oficina[]> => {
     const { data } = await client.query<{ oficinas: Oficina[] }>({
         query: GET_OFICINAS,
+        fetchPolicy: "network-only",
     });
     return data?.oficinas ?? [];
 };
@@ -20,17 +21,18 @@ export const createOficina = async (
 ): Promise<Oficina> => {
     const { data } = await client.mutate<{ createOficina: Oficina }>({
         mutation: CREATE_OFICINA,
-        variables: { createOficinaInput: input },
+        variables: { input },
     });
     return data?.createOficina ?? {} as Oficina;
 };
 
 export const updateOficina = async (
+    id: string,
     input: UpdateOficinaInput
 ): Promise<Oficina> => {
     const { data } = await client.mutate<{ updatedOficina: Oficina }>({
         mutation: UPDATE_OFICINA,
-        variables: { updateOficinaInput: input },
+        variables: { id, input },
     });
     return data?.updatedOficina ?? {} as Oficina;
 };

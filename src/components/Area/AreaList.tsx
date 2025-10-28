@@ -73,7 +73,7 @@ export default function AreaList(): JSX.Element {
                                         <span className="ml-1">Editar</span>
                                     </Link>
                                     <button
-                                        className="inline-flex items-center bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700"
+                                        className="inline-flex items-center bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700 cursor-pointer"
                                         onClick={() => handleDelete(s.id)}>
                                         <Trash2 size={14} />
                                         <span className="ml-1">Eliminar</span>

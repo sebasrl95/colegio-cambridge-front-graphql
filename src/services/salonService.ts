@@ -1,7 +1,7 @@
 import client from "./graphqlClient";
-import type { Salon, CreateSalonInput, UpdateSalonInput } from "../interfaces/salon";
-import { GET_SALON, GET_SALONES } from "../graphql/queries/salonQueries";
-import { CREATE_SALON, UPDATE_SALON, DELETE_SALON } from "../graphql/mutations/salonMutations";
+import type { Salon, CreateSalonInput, UpdateSalonInput } from "@interfaces/salon";
+import { GET_SALON, GET_SALONES } from "@graphql/queries/salonQueries";
+import { CREATE_SALON, UPDATE_SALON, DELETE_SALON } from "@graphql/mutations/salonMutations";
 
 export const getSalones = async (): Promise<Salon[]> => {
     const { data } = await client.query<{ salones: Salon[] }>({

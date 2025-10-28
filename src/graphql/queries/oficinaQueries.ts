@@ -5,7 +5,10 @@ export const GET_OFICINAS = gql`
     oficinas {
       id
       codigo
-      area { id nombre }
+      area {
+        id 
+        nombre
+      }
     }
   }
 `;
@@ -15,7 +18,10 @@ export const GET_OFICINA = gql`
     oficina(id: $id) {
       id
       codigo
-      area { id nombre }
+      area {
+        id 
+        nombre
+      }
     }
   }
 `;

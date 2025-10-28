@@ -6,6 +6,7 @@ import { CREATE_EMPLEADO, UPDATE_EMPLEADO, DELETE_EMPLEADO } from "../graphql/mu
 export const getEmpleados = async (): Promise<Empleado[]> => {
     const { data } = await client.query<{ empleados: Empleado[] }>({
         query: GET_EMPLEADOS,
+        fetchPolicy: "network-only",
     });
     return data?.empleados ?? [];
 };

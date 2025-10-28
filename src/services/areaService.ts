@@ -1,11 +1,12 @@
 import client from "./graphqlClient";
-import type { Area, CreateAreaInput, UpdateAreaInput } from "../interfaces/area";
-import { GET_AREA, GET_AREAS } from "../graphql/queries/areaQueries";
-import { CREATE_AREA, DELETE_AREA, UPDATE_AREA } from "../graphql/mutations/areaMutations";
+import type { Area, CreateAreaInput, UpdateAreaInput } from "@interfaces/area";
+import { GET_AREA, GET_AREAS } from "@graphql/queries/areaQueries";
+import { CREATE_AREA, DELETE_AREA, UPDATE_AREA } from "@graphql/mutations/areaMutations";
 
 export const getAreas = async (): Promise<Area[]> => {
     const { data } = await client.query<{ areas: Area[] }>({
         query: GET_AREAS,
+        fetchPolicy: "network-only",
     });
     return data?.areas ?? [];
 };

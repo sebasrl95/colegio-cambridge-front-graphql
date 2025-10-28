@@ -5,17 +5,23 @@ export const CREATE_OFICINA = gql`
     createOficina(createOficinaInput: $input) {
       id
       codigo
-      area
+      area {
+        id 
+        nombre
+      }
     }
   }
 `;
 
 export const UPDATE_OFICINA = gql`
-  mutation ($input: updateOficinaInput!) {
-    actualizarOficina(updateOficinaInput: $input) {
+  mutation ($id: ID!, $input: UpdateOficinaInput!) {
+    updateOficina(id: $id, updateOficinaInput: $input) {
       id
-      nombre
-      area
+      codigo
+      area {
+        id 
+        nombre
+      }
     }
   }
 `;
