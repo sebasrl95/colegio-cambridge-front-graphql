@@ -1,12 +1,17 @@
+import type { Area } from "./area";
+import type { Oficina } from "./oficina";
+
 export type TipoEmpleado = 'administrativo' | 'profesor';
+export type TipoProfesor = 'planta' | 'contratista';
 
 export interface Empleado {
-    _id: string;
+    id: string;
     nombre: string;
     documento: string;
     tipoEmpleado: TipoEmpleado;
-    area: string;
-    oficina: string;
+    tipoProfesor?: TipoProfesor;
+    area: Area;
+    oficina: Oficina;
 }
 
 export interface CreateEmpleadoInput {
@@ -21,6 +26,7 @@ export interface UpdateEmpleadoInput {
     nombre?: string;
     documento?: string;
     tipoEmpleado?: TipoEmpleado;
+    tipoProfesor?: TipoProfesor;
     area?: string;
     oficina?: string;
 }

@@ -1,22 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getEmpleado, createEmpleado, updateEmpleado } from "../../services/empleadoService";
-import { getAreas } from "../../services/areaService";
-import { getOficinas } from "../../services/oficinaService";
-import Loader from "../Loader/Loader";
-import ErrorMessage from "../Error/ErrorMessage";
+import { getEmpleado, createEmpleado, updateEmpleado } from "@services/empleadoService";
+import { getAreas } from "@services/areaService";
+import { getOficinas } from "@services/oficinaService";
+import { Save, X } from 'lucide-react';
+import Loader from "@components/Loader/Loader";
+import ErrorMessage from "@components/Error/ErrorMessage";
+import type { TipoEmpleado, TipoProfesor } from "@interfaces/empleado";
+import type { Area } from "@interfaces/area";
+import type { Oficina } from "@interfaces/oficina";
 
 export default function EmpleadoForm() {
-    const [nombre, setNombre] = useState("");
-    const [documento, setDocumento] = useState("");
-    const [areaId, setAreaId] = useState("");
-    const [oficinaId, setOficinaId] = useState("");
-    const [tipoEmpleado, setTipoEmpleado] = useState("administrativo");
-    const [tipoProfesor, setTipoProfesor] = useState("");
-    const [areas, setAreas] = useState([]);
-    const [oficinas, setOficinas] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [nombre, setNombre] = useState<string>("");
+    const [documento, setDocumento] = useState<string>("");
+    const [areaId, setAreaId] = useState<string>("");
+    const [oficinaId, setOficinaId] = useState<string>("");
+    const [tipoEmpleado, setTipoEmpleado] = useState<TipoEmpleado>("administrativo");
+    const [tipoProfesor, setTipoProfesor] = useState<TipoProfesor>("" as TipoProfesor);
+    const [areas, setAreas] = useState<Area[]>([]);
+    const [oficinas, setOficinas] = useState<Oficina[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [errors, setErrors] = useState<string[]>([]);
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -34,16 +38,16 @@ export default function EmpleadoForm() {
                     const empleado = await getEmpleado(id);
                     setNombre(empleado.nombre);
                     setDocumento(empleado.documento);
-                    setAreaId(String(empleado.area._id));
-                    setOficinaId(String(empleado.oficina._id));
-                    setTipoEmpleado(empleado.tipoEmpleado);
+                    setAreaId(String(empleado.area?.id) || "");
+                    setOficinaId(String(empleado.oficina?.id) || "");
+                    setTipoEmpleado(empleado.tipoEmpleado || "administrativo");
                     if (empleado.tipoEmpleado === "profesor") {
-                        setTipoProfesor(empleado.tipoProfesor || "");
+                        setTipoProfesor((empleado.tipoProfesor) || "planta");
                     }
                 }
             } catch (err) {
                 console.error("Error al cargar formulario:", err);
-                setError("No se pudo cargar la información del empleado.");
+                setErrors(["No se pudo cargar la información del empleado."]);
             } finally {
                 setLoading(false);
             }
@@ -51,15 +55,16 @@ export default function EmpleadoForm() {
         fetchData();
     }, [id]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             const payload = {
-                nombre,
-                documento,
+                nombre: nombre,
+                documento: documento,
                 area: areaId,
                 oficina: oficinaId,
-                tipoEmpleado,
+                tipoEmpleado: tipoEmpleado,
+                tipoProfesor: tipoEmpleado === "profesor" ? tipoProfesor : undefined,
             };
 
             if (tipoEmpleado === "profesor") {
@@ -72,9 +77,17 @@ export default function EmpleadoForm() {
                 await createEmpleado(payload);
             }
             navigate("/empleados");
-        } catch (err) {
-            console.error("Error al guardar empleado:", err);
-            setError("No se pudo guardar el empleado.");
+        } catch (err: PromiseLike<unknown> | unknown) {
+            console.error("Error al procesar empleado", err);
+            const axiosLike = err as { response?: { data?: { message?: string[] | string } } } | undefined;
+            if (axiosLike?.response?.data?.message) {
+                const msg = axiosLike.response.data.message;
+                setErrors(Array.isArray(msg) ? msg : [msg]);
+            } else if (err instanceof Error) {
+                setErrors([err.message]);
+            } else {
+                setErrors(["Error al procesar la solicitud"]);
+            }
         }
     };
 
@@ -83,74 +96,72 @@ export default function EmpleadoForm() {
     };
 
     if (loading) return <Loader text="Cargando formulario..." />;
-    if (error) return <ErrorMessage message={error} />;
 
     return (
-        <div className="container mt-4">
-            <h2>{id ? "Editar" : "Nuevo"} Empleado</h2>
+        <div className="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">{id ? "Editar" : "Nuevo"} Empleado</h2>
             <form onSubmit={handleSubmit}>
-                {/* Nombre */}
-                <div className="mb-3">
-                    <label>Nombre</label>
+                <div className="mb-4">
+                    <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">Nombre</label>
                     <input
+                        id="nombre"
                         type="text"
-                        className="form-control"
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
                         required
                     />
                 </div>
 
-                {/* Documento */}
-                <div className="mb-3">
-                    <label>Documento</label>
+                <div className="mb-4">
+                    <label htmlFor="documento" className="block text-sm font-medium text-gray-700">Documento</label>
                     <input
+                        id="documento"
                         type="text"
-                        className="form-control"
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                         value={documento}
                         onChange={(e) => setDocumento(e.target.value)}
                         required
                     />
                 </div>
 
-                {/* Área */}
-                <div className="mb-3">
-                    <label>Área</label>
+                <div className="mb-4">
+                    <label htmlFor="areaSelect">Área</label>
                     {areas.length === 0 ? (
                         <ErrorMessage message={'No se encuentran áreas registradas.'} />
                     ) :
                         <select
-                            className="form-select"
+                            id="areaSelect"
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             value={areaId}
                             onChange={(e) => setAreaId(e.target.value)}
-                            required
-                        >
+                            required>
                             <option value="">Seleccione un área</option>
-                            {areas.map((a) => (
-                                <option key={a._id} value={String(a._id)}>
-                                    {a.nombre}
+                            {areas.map((area) => (
+                                <option key={area.id} value={area.id}>
+                                    {area.nombre}
                                 </option>
                             ))}
                         </select>
                     }
                 </div>
 
-                {/* Oficina */}
                 <div className="mb-3">
-                    <label>Oficina</label>
+                    <label htmlFor="oficinaSelect">Oficina</label>
 
                     {areas.length === 0 ? (
                         <ErrorMessage message={'No se encuentran oficinas registradas.'} />
                     ) :
                         <select
-                            className="form-select"
+                            id="oficinaSelect"
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             value={oficinaId}
                             onChange={(e) => setOficinaId(e.target.value)}
                             required
                         >
                             <option value="">Seleccione una oficina</option>
                             {oficinas.map((o) => (
-                                <option key={o._id} value={String(o._id)}>
+                                <option key={o.id} value={String(o.id)}>
                                     {o.codigo}
                                 </option>
                             ))}
@@ -158,13 +169,13 @@ export default function EmpleadoForm() {
                     }
                 </div>
 
-                {/* Tipo de Empleado */}
                 <div className="mb-3">
-                    <label>Tipo de Empleado</label>
+                    <label htmlFor="tipoEmpleadoSelect">Tipo Empleado</label>
                     <select
-                        className="form-select"
+                        id="tipoEmpleadoSelect"
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                         value={tipoEmpleado}
-                        onChange={(e) => setTipoEmpleado(e.target.value)}
+                        onChange={(e) => setTipoEmpleado(e.target.value as TipoEmpleado)}
                         required
                     >
                         <option value="administrativo">Administrativo</option>
@@ -172,14 +183,14 @@ export default function EmpleadoForm() {
                     </select>
                 </div>
 
-                {/* Tipo de Profesor (solo si es profesor) */}
                 {tipoEmpleado === "profesor" && (
                     <div className="mb-3">
-                        <label>Tipo de Profesor</label>
+                        <label htmlFor="tipoProfesor">Tipo de Profesor</label>
                         <select
-                            className="form-select"
+                            id="tipoProfesor"
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             value={tipoProfesor}
-                            onChange={(e) => setTipoProfesor(e.target.value)}
+                            onChange={(e) => setTipoProfesor(e.target.value as TipoProfesor)}
                             required
                         >
                             <option value="">Seleccione tipo de profesor</option>
@@ -189,14 +200,20 @@ export default function EmpleadoForm() {
                     </div>
                 )}
 
-                {/* Botones */}
-                <button type="submit" className="btn btn-success me-2">
-                    Guardar
-                </button>
-                <button type="button" className="btn btn-secondary" onClick={handleCancel}>
-                    Cancelar
-                </button>
+                <div className="flex space-x-2">
+                    <button type="submit" className="inline-flex items-center bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 cursor-pointer">
+                        <Save size={16} />
+                        <span className="ml-2">Guardar</span>
+                    </button>
+                    <button type="button" className="inline-flex items-center bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 cursor-pointer" onClick={handleCancel}>
+                        <X size={16} />
+                        <span className="ml-2">Cancelar</span>
+                    </button>
+                </div>
             </form>
+            {errors.length > 0 && errors.map((err) => (
+                <ErrorMessage message={err} />
+            ))}
         </div>
     );
 }

@@ -37,9 +37,6 @@ export default function OficinaList() {
         }
     };
 
-    if (loading) return <Loader text="Cargando oficinas..." />;
-    if (error) return <ErrorMessage message={error} />;
-
     return (
         <div className="max-w-4xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg border border-gray-200">
             {loading && <Loader text="Cargando oficinas..." />}

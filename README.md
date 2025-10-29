@@ -1,75 +1,116 @@
-# React + TypeScript + Vite
+# 📚 Colegio Cambridge - Plataforma de Gestión
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una aplicación web para administrar la información del **Colegio Cambridge**.  
+Consta de un **API en GRAPHQL** y un **frontend en React 19**.  
 
-Currently, two official plugins are available:
+El sistema permite gestionar:
+- 🏫 **Salones**
+- 🏢 **Oficinas**
+- 🌐 **Áreas**
+- 👩‍🏫 **Empleados**
+- 📊 **Reportes**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Tecnologías usadas
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **Frontend**: [React 19](https://react.dev/) con TSX  
+- **Estilos**: [TailwindCSS](https://tailwindcss.com/)  
+- **Cliente HTTP**: [GraphQL](https://graphql.org/)  
+- **Ruteo**: [React Router DOM](https://reactrouter.com/)  
+- **Backend (API)**: NestJS / Graphql  
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
+## ⚙️ Instalación del frontend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tuusuario/colegio-cambridge-frontend-graphql.git
+   cd colegio-cambridge-frontend-graphql
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+2. Instala dependencias:
+   ```bash
+   npm install
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+3. Inicia el frontend:
+   ```bash
+   npm run dev
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+4. Asegúrate de que el **API** esté corriendo en:
+   ```
+   http://localhost:4000/graphql
+   ```
+
+---
+
+## ⚙️ Instalación del backend (API)
+
+Repositorio del API: https://github.com/sebasrl95/colegio-cambridge-api-graphql
+
+Pasos generales:
+```bash
+git clone https://github.com/sebasrl95/colegio-cambridge-api-graphql.git
+cd colegio-cambridge-api-graphql
+npm install
+npm run start:dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## ✨ Funcionalidades principales
+
+- **Home**
+  - Bienvenida al sistema con acceso rápido a todos los módulos.
+
+- **CRUD Salones**
+  - Crear, listar, editar y eliminar salones.
+  - Cada salón se asocia a un **Área**.
+  - Botón de **Cancelar** en el formulario.
+
+- **CRUD Oficinas**
+  - Crear, listar, editar y eliminar oficinas.
+
+- **CRUD Áreas**
+  - Crear, listar, editar y eliminar áreas.
+
+- **CRUD Empleados**
+  - Campos: `nombre`, `documento`, `área`, `oficina`, `tipoEmpleado`, `tipoProfesor` (si aplica).
+  - Soporte para empleados **administrativos** y **profesores**.
+  - Precarga de área y oficina en modo edición.
+  - Botón de **Cancelar** en el formulario.
+
+- **Estados de carga y error**
+  - Componente `<Loader />` con spinner de Bootstrap.
+  - Componente `<ErrorMessage />` para mostrar fallas de conexión.
+
+- **Módulo de Reportes**
+  - Reporte de **Áreas y Empleados**.
+  - Reporte de **Áreas y Salones**.
+  - Reporte de **Áreas y Oficinas**.
+  - Reportes organizados en **pestañas (Tabs de Bootstrap)**.
+
+---
+
+## 🖼️ Capturas
+
+### Pantalla principal (Home)
+![Pantalla de inicio](./public/assets/images/colegio-cambridge-home.png)
+
+---
+
+## 📌 Requisitos previos
+
+- Node.js **v20+**
+- npm **v10+**
+- API corriendo en `localhost:4000`
+
+---
+
+## 📜 Licencia
+
+Proyecto con fines educativos - Ingeniería Informática.

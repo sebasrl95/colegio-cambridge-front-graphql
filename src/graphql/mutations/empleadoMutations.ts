@@ -6,22 +6,36 @@ export const CREATE_EMPLEADO = gql`
       id
       nombre
       documento
-      area
-      oficina
       tipoEmpleado
+      tipoProfesor
+      area {
+        id
+        nombre
+      }
+      oficina {
+        id
+        codigo
+      }
     }
   }
 `;
 
 export const UPDATE_EMPLEADO = gql`
-  mutation ($input: updateEmpleadoInput!) {
-    actualizarEmpleado(updateEmpleadoInput: $input) {
+  mutation ($id: ID!, $input: UpdateEmpleadoInput!) {
+    updateEmpleado(id: $id, updateEmpleadoInput: $input) {
       id
       nombre
       documento
-      area
-      oficina
       tipoEmpleado
+      tipoProfesor
+      area {
+        id
+        nombre
+      }
+      oficina {
+        id
+        codigo
+      }
     }
   }
 `;

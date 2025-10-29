@@ -5,11 +5,17 @@ export const GET_EMPLEADOS = gql`
     empleados {
       id
       nombre
-      area {
-        nombre
-      }
       documento
       tipoEmpleado
+      tipoProfesor
+      area {
+        id
+        nombre
+      }
+      oficina {
+        id
+        codigo
+      }
     }
   }
 `;
@@ -19,11 +25,17 @@ export const GET_EMPLEADO = gql`
     empleado(id: $id) {
       id
       nombre
-      area {
-        nombre
-      }
       documento
       tipoEmpleado
+      tipoProfesor
+      area {
+        id
+        nombre
+      }
+      oficina {
+        id
+        codigo
+      }
     }
   }
 `;

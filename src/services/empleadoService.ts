@@ -21,17 +21,18 @@ export const createEmpleado = async (
 ): Promise<Empleado> => {
     const { data } = await client.mutate<{ createEmpleado: Empleado }>({
         mutation: CREATE_EMPLEADO,
-        variables: { createEmpleadoInput: input },
+        variables: { input },
     });
     return data?.createEmpleado ?? {} as Empleado;
 };
 
 export const updateEmpleado = async (
+    id: string,
     input: UpdateEmpleadoInput
 ): Promise<Empleado> => {
     const { data } = await client.mutate<{ updatedEmpleado: Empleado }>({
         mutation: UPDATE_EMPLEADO,
-        variables: { updateEmpleadoInput: input },
+        variables: { id, input },
     });
     return data?.updatedEmpleado ?? {} as Empleado;
 };
